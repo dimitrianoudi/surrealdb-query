@@ -1,0 +1,4 @@
+#V2
+DEFINE SCOPE account SESSION 24h\n    SIGNUP ( CREATE user SET email = $email, pass = crypto::argon2::generate($pass) )\n    SIGNIN ( SELECT * FROM user WHERE email = $email AND crypto::argon2::compare(pass, $pass) )\n    ;
+DEFINE TABLE demo SCHEMALESS PERMISSIONS FULL;
+DEFINE INDEX unique_email ON user FIELDS email UNIQUE;\n    DEFINE INDEX unique_username ON user FIELDS username UNIQUE;
