@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { initDb, getAllPosts, fetchPostByTitle } from './db';
+import { initDb, getAllPosts } from './db';
 
 interface Post {
   id: string;
@@ -12,11 +12,19 @@ const fetchAllPosts = async (): Promise<Post[]> => {
   await initDb();
   const posts = await getAllPosts();
   if (!posts || posts.length === 0) {
-    console.error('No posts found');
     throw new Error('No posts found');
   }
-  console.log('Fetched posts in fetchAllPosts:', posts);
   return posts;
+};
+
+const fetchPostByTitle = async (title: string): Promise<Post> => {
+  await initDb();
+  const posts = await getAllPosts();
+  const post = posts.find(p => p.title === title);
+  if (!post) {
+    throw new Error(`No post found with title ${title}`);
+  }
+  return post;
 };
 
 const App: React.FC = () => {
@@ -34,12 +42,9 @@ const App: React.FC = () => {
   if (postsError) return <div>Error loading posts: {postsError.message}</div>;
   if (postError) return <div>Error loading post: {postError.message}</div>;
 
-  console.log('Rendering posts:', posts);
-  console.log('Rendering post by title:', post);
-
   return (
     <div>
-      <h1>All Posts</h1>
+      <h1>Fetching All Posts</h1>
       <ul>
         {posts?.map(post => (
           <li key={post.id}>
