@@ -1,5 +1,5 @@
 {
-  "name": "surrealdb-query",
+  "name": "tanstack-query",
   "private": true,
   "version": "0.0.0",
   "type": "module",
